@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selamat Hari Girlfriend Sedunia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum-deep:#140B10;
+    --plum-panel:#1F1219;
+    --plum-panel-2:#291823;
+    --gold:#C9A24B;
+    --gold-light:#E7CE93;
+    --gold-shine:#F7ECC9;
+    --rose:#D8A3AC;
+    --cream:#F4E9DC;
+    --ink:#2A1B1E;
+    --muted:#C9B7B1;
+    --serif:'Cormorant Garamond', serif;
+    --sans:'Jost', sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at 20% -10%, rgba(201,162,75,0.10), transparent 45%),
+      radial-gradient(ellipse at 90% 10%, rgba(216,163,172,0.08), transparent 40%),
+      var(--plum-deep);
+    color:var(--cream);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    overflow:hidden; /* navigation is click-based, not by scrolling the whole page */
+  }
+  h1,h2,h3{font-family:var(--serif); font-weight:600; margin:0;}
+  p{margin:0;}
+
+  ::selection{ background:var(--gold); color:var(--ink); }
+  *:focus-visible{ outline:2px solid var(--gold-light); outline-offset:4px; border-radius:2px; }
+
+  .eyebrow{
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    font-size:0.76rem; letter-spacing:0.28em; text-transform:uppercase;
+    color:var(--gold-light); margin-bottom:16px;
+  }
+  .eyebrow::before,.eyebrow::after{ content:""; width:26px; height:1px; background:linear-gradient(90deg, transparent, var(--gold)); }
+  .eyebrow::after{ background:linear-gradient(90deg, var(--gold), transparent); }
+  .diamond{ display:inline-block; width:7px; height:7px; background:var(--gold); transform:rotate(45deg); box-shadow:0 0 8px rgba(201,162,75,0.7); }
+
+  /* ============================================================
+     PROGRESS DOTS
+  ============================================================ */
+  .progress{
+    position:fixed; top:22px; left:50%; transform:translateX(-50%);
+    display:flex; gap:9px; z-index:60;
+  }
+  .progress__dot{
+    width:6px; height:6px; border-radius:50%;
+    background:rgba(201,162,75,0.28);
+    transition:background .4s ease, transform .4s ease;
+  }
+  .progress__dot.is-active{ background:var(--gold-shine); transform:scale(1.5); }
+  .progress__dot.is-done{ background:var(--gold); }
+
+  /* ============================================================
+     APP / SCREENS (step navigation, no page scroll)
+  ============================================================ */
+  .app{ position:relative; width:100%; height:100svh; }
+  .screen{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:90px 28px 56px;
+    opacity:0; pointer-events:none;
+    transform:translateY(18px);
+    transition:opacity .55s ease, transform .55s ease;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .screen.is-active{ opacity:1; pointer-events:auto; transform:translateY(0); z-index:2; }
+  .screen__inner{ width:100%; max-width:640px; margin:0 auto; }
+
+  /* ---------- shared nav button ---------- */
+  .nav-btn{
+    position:relative;
+    display:inline-flex; align-items:center; gap:10px;
+    background:transparent;
+    border:1px solid var(--gold);
+    color:var(--gold-light);
+    font-family:var(--sans);
+    font-size:0.82rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    padding:15px 32px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:background .35s ease, color .35s ease, box-shadow .35s ease, opacity .4s ease, transform .4s ease;
+  }
+  .nav-btn:hover{ background:var(--gold); color:#241420; box-shadow:0 10px 30px rgba(201,162,75,0.35); }
+  .nav-btn[hidden]{ display:none; }
+  .nav-btn--reveal{ opacity:0; transform:translateY(10px); animation:revealIn .6s ease forwards; }
+  @keyframes revealIn{ to{ opacity:1; transform:translateY(0);} }
+
+  /* ============================================================
+     SCREEN 1 — HERO
+  ============================================================ */
+  #screen-hero .screen__inner{ max-width:560px; }
+  .hero__sparkles{ position:absolute; inset:0; pointer-events:none; }
+  .sparkle{
+    position:absolute; top:-10px; width:4px; height:4px; border-radius:50%;
+    background:var(--gold-shine); box-shadow:0 0 6px 1px rgba(247,236,201,0.8);
+    animation:fall linear infinite; opacity:0.85;
+  }
+  @keyframes fall{
+    0%{ transform:translateY(0) translateX(0) scale(1); opacity:0; }
+    10%{ opacity:.9; }
+    100%{ transform:translateY(105vh) translateX(var(--drift,20px)) scale(.4); opacity:0; }
+  }
+  .hero__date{ font-size:0.76rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--rose); margin-bottom:20px; }
+  .hero__title{
+    font-size:clamp(2.3rem, 7vw, 4.6rem); font-style:italic; font-weight:600; line-height:1.08;
+    background:linear-gradient(100deg, var(--gold-light) 10%, var(--gold-shine) 40%, var(--gold) 65%, var(--gold-light) 90%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow:0 0 40px rgba(201,162,75,0.18);
+  }
+  .hero__sub{ margin-top:22px; font-size:clamp(1rem,2.2vw,1.2rem); color:var(--muted); font-weight:300; line-height:1.7; }
+  .hero__sub b{ color:var(--gold-light); font-weight:500; }
+  .hero__cta{ margin-top:38px; }
+
+  /* ============================================================
+     SCREEN 2 — LETTER
+  ============================================================ */
+  #screen-letter h2{ font-size:clamp(1.7rem,4vw,2.3rem); font-style:italic; color:var(--gold-shine); margin-bottom:40px; }
+  .letter{ max-width:400px; margin:0 auto; }
+  .envelope{
+    position:relative; width:100%; aspect-ratio:16/10; border-radius:8px;
+    background:linear-gradient(155deg, var(--plum-panel-2), var(--plum-panel));
+    border:1px solid rgba(201,162,75,0.45);
+    box-shadow:0 20px 50px rgba(0,0,0,0.45);
+    cursor:pointer; perspective:900px; isolation:isolate;
+  }
+  .envelope__flap{
+    position:absolute; inset:0;
+    clip-path:polygon(0 0, 100% 0, 50% 58%);
+    background:linear-gradient(160deg, #3A2130, #241420);
+    border-bottom:1px solid rgba(201,162,75,0.25);
+    transform-origin:top center;
+    transition:transform .9s cubic-bezier(.4,.1,.2,1), opacity .6s ease .3s;
+    z-index:3;
+  }
+  .envelope__lines{ position:absolute; inset:0; border-radius:8px; background:linear-gradient(115deg, transparent 46%, rgba(201,162,75,0.18) 50%, transparent 54%); z-index:1; }
+  .envelope__seal{
+    position:absolute; top:52%; left:50%; transform:translate(-50%,-50%);
+    width:56px; height:56px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--gold-shine), var(--gold) 55%, #8a6a28 100%);
+    box-shadow:0 6px 16px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.15);
+    display:flex; align-items:center; justify-content:center; z-index:4;
+    transition:transform .6s cubic-bezier(.4,.1,.2,1), opacity .5s ease;
+  }
+  .envelope__seal svg{ width:23px; height:23px; fill:#3a2410; }
+  .envelope__label{
+    position:absolute; bottom:-36px; left:50%; transform:translateX(-50%);
+    font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold);
+    white-space:nowrap; transition:opacity .4s ease;
+  }
+  .letter.is-open .envelope{ cursor:default; }
+  .letter.is-open .envelope__flap{ transform:rotateX(180deg); opacity:0; }
+  .letter.is-open .envelope__seal{ transform:translate(-50%,-50%) scale(0) rotate(35deg); opacity:0; }
+  .letter.is-open .envelope__label{ opacity:0; }
+
+  .paper{
+    margin-top:20px; background:linear-gradient(180deg, var(--cream), #ece0cf); color:var(--ink);
+    border-radius:4px; padding:0; max-height:0; opacity:0; overflow:hidden; transform:translateY(-12px);
+    transition:max-height .8s cubic-bezier(.3,.2,.2,1), opacity .7s ease, transform .8s ease, padding .6s ease;
+    box-shadow:0 25px 50px rgba(0,0,0,0.35); text-align:left;
+  }
+  .letter.is-open .paper{ max-height:900px; opacity:1; transform:translateY(0); padding:32px 28px 26px; }
+  .paper__to{ font-family:var(--serif); font-style:italic; font-size:1.4rem; color:#5b2f3d; margin-bottom:12px; }
+  .paper__body{ font-size:0.98rem; line-height:1.8; font-weight:300; color:#3c2a2b; white-space:pre-line; }
+  .paper__from{ margin-top:20px; font-family:var(--serif); font-style:italic; font-size:1.1rem; color:#5b2f3d; text-align:right; }
+  .letter__cta{ margin-top:34px; }
+
+  /* ============================================================
+     SCREEN 3 — FINALE
+  ============================================================ */
+  #screen-finale h2{
+    font-size:clamp(2rem,6vw,3.2rem); font-style:italic;
+    background:linear-gradient(100deg, var(--gold-light), var(--gold-shine), var(--gold));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin:0 auto 16px;
+  }
+  #screen-finale p.finale__msg{ color:var(--muted); font-weight:300; max-width:34ch; margin:0 auto 36px; line-height:1.7; }
+  .finale__actions{ display:flex; flex-wrap:wrap; gap:14px; justify-content:center; }
+  .nav-btn--ghost{ border-color:rgba(201,162,75,0.4); color:var(--muted); font-size:0.74rem; padding:13px 26px; }
+  .nav-btn--ghost:hover{ background:rgba(201,162,75,0.12); color:var(--gold-light); }
+
+  .heart-burst{ position:fixed; inset:0; pointer-events:none; z-index:80; }
+  .flying-heart{ position:absolute; bottom:0; font-size:1.2rem; color:var(--gold-light); animation:floatUp 2.6s ease-in forwards; }
+  @keyframes floatUp{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); opacity:1; }
+    100%{ transform:translateY(-90vh) translateX(var(--dx,0px)) rotate(var(--rot,20deg)); opacity:0; }
+  }
+
+  /* ============================================================
+     MUSIC TOGGLE (floating button, only shown if CONFIG.music.src is set)
+  ============================================================ */
+  .music-toggle{
+    position:fixed; right:20px; bottom:20px; z-index:70;
+    width:46px; height:46px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(155deg, var(--plum-panel-2), var(--plum-panel));
+    border:1px solid rgba(201,162,75,0.5);
+    color:var(--gold-light);
+    cursor:pointer;
+    box-shadow:0 10px 26px rgba(0,0,0,0.4);
+    transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .music-toggle:hover{ transform:translateY(-2px); border-color:var(--gold); }
+  .music-toggle[hidden]{ display:none; }
+  .music-toggle svg{ width:18px; height:18px; fill:currentColor; }
+  .music-toggle .icon-pause{ display:none; }
+  .music-toggle.is-playing .icon-play{ display:none; }
+  .music-toggle.is-playing .icon-pause{ display:block; }
+  .music-toggle.is-playing{
+    animation:musicPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes musicPulse{
+    0%,100%{ box-shadow:0 10px 26px rgba(0,0,0,0.4), 0 0 0 0 rgba(201,162,75,0.35); }
+    50%{ box-shadow:0 10px 26px rgba(0,0,0,0.4), 0 0 0 8px rgba(201,162,75,0); }
+  }
+
+  footer.credit{
+    position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+    font-size:0.7rem; letter-spacing:0.08em; color:var(--muted); opacity:.7;
+  }
+
+  @media (max-width:560px){
+    .screen{ padding:76px 20px 46px; }
+    .music-toggle{ right:14px; bottom:14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .sparkle, .flying-heart{ animation:none !important; display:none; }
+    .envelope__flap,.envelope__seal,.paper,.gallery-grid,.nav-btn--reveal{ transition:opacity .2s linear !important; animation:none !important; opacity:1; transform:none; }
+    .screen{ transition:opacity .2s linear !important; transform:none !important; }
+    .music-toggle.is-playing{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!--
+  ============================================================
+  CARA MENGEDIT / CUSTOMIZE
+  Semua isi personal (nama, pesan, foto, musik) diatur di satu
+  tempat: object CONFIG di dalam <script> pada bagian bawah file
+  ini. Cari komentar "EDIT DI SINI" lalu ganti teksnya.
+
+  Alur halaman ini berbentuk "langkah demi langkah" (bukan satu
+  halaman panjang yang di-scroll): setiap bagian adalah layar
+  penuh, dan dia harus klik tombol untuk lanjut ke bagian
+  berikutnya. File ini 100% statis (HTML/CSS/JS saja) jadi aman
+  untuk di-host di GitHub Pages.
+  ============================================================
+-->
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<main class="app" id="app">
+
+  <!-- SCREEN 1 — HERO -->
+  <section class="screen is-active" id="screen-hero" data-index="0">
+    <div class="hero__sparkles" id="sparkleField" aria-hidden="true"></div>
+    <div class="screen__inner">
+      <p class="hero__date">1 Agustus &middot; Hari Girlfriend Sedunia</p>
+      <h1 class="hero__title">Selamat Hari<br>Girlfriend Sedunia</h1>
+      <p class="hero__sub">Untuk <b id="heroName">Hani</b> — yang bikin hari biasa terasa jauh lebih indah.</p>
+      <div class="hero__cta">
+        <button class="nav-btn" id="btnToLetter">Buka Surat &#10148;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 2 — LETTER -->
+  <section class="screen" id="screen-letter" data-index="1">
+    <div class="screen__inner">
+      <div class="eyebrow"><span class="diamond"></span>Sebuah Surat Kecil<span class="diamond"></span></div>
+      <h2>Ada titipan hati untukmu</h2>
+
+      <div class="letter" id="letterWrap">
+        <div class="envelope" id="envelope" role="button" tabindex="0" aria-expanded="false" aria-label="Buka surat cinta">
+          <div class="envelope__lines"></div>
+          <div class="envelope__flap"></div>
+          <div class="envelope__seal">
+            <svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.1C0.4 8.9 1.8 5.4 5 4.5c2-.6 3.9.2 5 1.8 1.1-1.6 3-2.4 5-1.8 3.2.9 4.6 4.4 3 7.4C19.5 16.4 12 21 12 21z"/></svg>
+          </div>
+          <span class="envelope__label">Ketuk untuk membuka</span>
+        </div>
+
+        <div class="paper" id="paper">
+          <p class="paper__to" id="paperTo">Untuk Hani,</p>
+          <p class="paper__body" id="paperBody"></p>
+          <p class="paper__from" id="paperFrom">— Aku</p>
+        </div>
+      </div>
+
+      <div class="letter__cta">
+        <button class="nav-btn nav-btn--reveal" id="btnToFinale" hidden>Lanjut &#10148;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 3 — FINALE -->
+  <section class="screen" id="screen-finale" data-index="2">
+    <div class="screen__inner">
+      <h2 id="finaleTitle">Happy Girlfriend's Day, Hani.</h2>
+      <p class="finale__msg">Semoga hari ini secerah senyummu, dan tahun-tahun ke depan sehangat pelukmu.</p>
+      <div class="finale__actions">
+        <button class="nav-btn" id="heartBtn">Kirim Cinta &#9825;</button>
+        <button class="nav-btn nav-btn--ghost" id="btnRestart">Ulangi dari Awal</button>
+      </div>
+    </div>
+    <footer class="credit">Dibuat dengan &#9825; <span id="footerName">untuk Hani</span></footer>
+  </section>
+
+</main>
+
+<audio id="bgMusic" loop preload="none"></audio>
+<button class="music-toggle" id="musicToggle" hidden aria-label="Putar musik">
+  <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+  <svg class="icon-pause" viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+</button>
+
+<div class="heart-burst" id="heartBurst" aria-hidden="true"></div>
+
+<script>
+/* ================================================================
+   EDIT DI SINI — semua yang perlu kamu ganti ada di object ini.
+   ================================================================ */
+const CONFIG = {
+  girlfriendName: "Hani",          // nama pacarmu
+  yourName: "Aku",                    // nama / panggilanmu
+
+  letterMessage:
+`Hani,
+
+Ada begitu banyak kata yang ingin aku susun untukmu hari ini, tapi rasanya
+tak satu pun cukup untuk menggambarkan betapa berartinya kamu bagiku.
+Sejak kamu hadir, hari-hari yang dulu biasa saja perlahan berubah warna —
+lebih hangat, lebih ringan, lebih layak untuk disyukuri.
+
+Terima kasih sudah jadi tempat pulang paling nyaman yang pernah aku punya.
+Terima kasih sudah sabar mendengarkan cerita-ceritaku yang kadang tidak
+penting, menemaniku di hari-hari yang berat tanpa pernah mengeluh, dan
+membuat hal sekecil apa pun — segelas es teh, obrolan larut malam, tawa
+kecil di tengah hari yang melelahkan — terasa jadi momen yang paling
+berharga dalam hidupku.
+
+Kamu adalah alasan aku percaya bahwa cinta itu tidak harus rumit; cukup
+hadir, cukup jujur, dan cukup memilih satu sama lain setiap hari. Aku
+bersyukur boleh memilihmu, hari ini dan di setiap hari yang akan datang.
+
+Selamat Hari Girlfriend Sedunia, Hani. Semoga kamu selalu tahu betapa
+dicintainya kamu — bukan hanya hari ini, tapi selamanya. Aku sayang kamu,
+lebih dari yang bisa diungkapkan kata-kata.`,
+
+  // Musik latar (opsional). Kosongkan "src" kalau tidak mau pakai musik.
+  // Taruh file lagu (mp3) satu folder dengan file HTML ini, misal di
+  // folder "audio/", lalu isi src-nya, contoh: "audio/lagu.mp3".
+  // HANYA untuk lagu yang memang hak-nya kamu punya (royalty-free,
+  // rekaman sendiri, dll) — bukan untuk lagu komersial berhak cipta,
+  // karena file-nya bakal ikut ter-upload ke GitHub secara publik.
+  music: {
+    src: "",           // contoh: "audio/lagu.mp3"
+    volume: 0.5        // 0.0 - 1.0
+  }
+};
+/* ================================================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- isi teks personal ---------- */
+  document.getElementById("heroName").textContent = CONFIG.girlfriendName;
+  document.getElementById("paperTo").textContent = `Untuk ${CONFIG.girlfriendName},`;
+  document.getElementById("paperBody").textContent = CONFIG.letterMessage;
+  document.getElementById("paperFrom").textContent = `— ${CONFIG.yourName}`;
+  document.getElementById("finaleTitle").textContent = `Happy Girlfriend's Day, ${CONFIG.girlfriendName}.`;
+  document.getElementById("footerName").textContent = `untuk ${CONFIG.girlfriendName}`;
+
+  /* ================================================================
+     NAVIGASI ANTAR LAYAR
+  ================================================================ */
+  const screens = Array.from(document.querySelectorAll(".screen"))
+    .sort((a, b) => Number(a.dataset.index) - Number(b.dataset.index));
+  const progress = document.getElementById("progress");
+
+  screens.forEach((_, i) => {
+    const dot = document.createElement("span");
+    dot.className = "progress__dot" + (i === 0 ? " is-active" : "");
+    progress.appendChild(dot);
+  });
+  const dots = Array.from(progress.children);
+
+  let current = 0;
+
+  function setInert(screen, on){
+    if ("inert" in screen) { screen.inert = on; }
+    else { screen.setAttribute("aria-hidden", on ? "true" : "false"); }
+  }
+
+  screens.forEach((s, i) => { if (i !== 0) setInert(s, true); });
+
+  function goTo(index){
+    if (index === current) return;
+    screens[current].classList.remove("is-active");
+    setInert(screens[current], true);
+
+    current = index;
+    screens[current].classList.add("is-active");
+    setInert(screens[current], false);
+    screens[current].scrollTop = 0;
+
+    dots.forEach((d, i) => {
+      d.classList.toggle("is-active", i === current);
+      d.classList.toggle("is-done", i < current);
+    });
+  }
+
+  document.getElementById("btnToLetter").addEventListener("click", () => goTo(1));
+  document.getElementById("btnToFinale").addEventListener("click", () => goTo(2));
+  document.getElementById("btnRestart").addEventListener("click", () => {
+    resetLetter();
+    goTo(0);
+  });
+
+  /* ---------- buka surat ---------- */
+  const letterWrap = document.getElementById("letterWrap");
+  const envelope = document.getElementById("envelope");
+  const btnLetterNext = document.getElementById("btnToFinale");
+
+  /* ---------- musik latar ---------- */
+  const bgMusic = document.getElementById("bgMusic");
+  const musicToggle = document.getElementById("musicToggle");
+  let musicStarted = false;
+
+  if (CONFIG.music && CONFIG.music.src) {
+    bgMusic.src = CONFIG.music.src;
+    bgMusic.volume = CONFIG.music.volume ?? 0.5;
+    musicToggle.hidden = false;
+
+    bgMusic.addEventListener("error", () => { musicToggle.hidden = true; });
+
+    function playMusic(){
+      bgMusic.play().then(() => {
+        musicStarted = true;
+        musicToggle.classList.add("is-playing");
+        musicToggle.setAttribute("aria-label", "Hentikan musik");
+      }).catch(() => { /* diblokir browser, tunggu klik manual */ });
+    }
+    function pauseMusic(){
+      bgMusic.pause();
+      musicToggle.classList.remove("is-playing");
+      musicToggle.setAttribute("aria-label", "Putar musik");
+    }
+    musicToggle.addEventListener("click", () => {
+      if (bgMusic.paused) { playMusic(); } else { pauseMusic(); }
+    });
+    // simpan agar bisa dipanggil saat surat dibuka
+    window.__playMusicOnLetterOpen = () => { if (!musicStarted) playMusic(); };
+  }
+
+  function openLetter(){
+    letterWrap.classList.add("is-open");
+    envelope.setAttribute("aria-expanded", "true");
+    envelope.removeAttribute("tabindex");
+    btnLetterNext.hidden = false;
+    if (window.__playMusicOnLetterOpen) window.__playMusicOnLetterOpen();
+  }
+  function resetLetter(){
+    letterWrap.classList.remove("is-open");
+    envelope.setAttribute("aria-expanded", "false");
+    envelope.setAttribute("tabindex", "0");
+    btnLetterNext.hidden = true;
+  }
+  envelope.addEventListener("click", openLetter);
+  envelope.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLetter(); }
+  });
+
+  /* ---------- sparkle di hero ---------- */
+  if (!reduceMotion) {
+    const field = document.getElementById("sparkleField");
+    for (let i = 0; i < 22; i++) {
+      const s = document.createElement("span");
+      s.className = "sparkle";
+      s.style.left = Math.random() * 100 + "%";
+      s.style.setProperty("--drift", (Math.random() * 60 - 30) + "px");
+      s.style.animationDuration = (6 + Math.random() * 8) + "s";
+      s.style.animationDelay = (Math.random() * 8) + "s";
+      field.appendChild(s);
+    }
+  }
+
+  /* ---------- tombol kirim cinta ---------- */
+  const heartBtn = document.getElementById("heartBtn");
+  const burst = document.getElementById("heartBurst");
+
+  function spawnHearts(count){
+    const rect = heartBtn.getBoundingClientRect();
+    for (let i = 0; i < count; i++) {
+      const h = document.createElement("span");
+      h.className = "flying-heart";
+      h.textContent = "\u2665";
+      h.style.left = (rect.left + rect.width / 2 + (Math.random() * 220 - 110)) + "px";
+      h.style.setProperty("--dx", (Math.random() * 320 - 160) + "px");
+      h.style.setProperty("--rot", (Math.random() * 90 - 45) + "deg");
+      h.style.color = Math.random() > 0.5 ? "#E7CE93" : "#D8A3AC";
+      h.style.fontSize = (14 + Math.random() * 22) + "px";
+      h.style.animationDuration = (1.8 + Math.random() * 2) + "s";
+      burst.appendChild(h);
+      setTimeout(() => h.remove(), 4200);
+    }
+  }
+
+  heartBtn.addEventListener("click", () => {
+    if (reduceMotion) return;
+    spawnHearts(45);
+    setTimeout(() => spawnHearts(35), 180);
+    setTimeout(() => spawnHearts(25), 360);
+  });
+});
+</script>
+</body>
+</html>
